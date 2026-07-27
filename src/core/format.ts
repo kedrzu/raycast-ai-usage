@@ -4,7 +4,13 @@ const DEFAULT_WIDTH = 15;
 
 export function progressBar(percent: number, width: number = DEFAULT_WIDTH): string {
   const clamped = Math.min(100, Math.max(0, percent));
-  const filled = Math.round((clamped / 100) * width);
+  let filled = Math.round((clamped / 100) * width);
+
+  // Rounding alone would render 1% as entirely empty and 99% as entirely full,
+  // erasing the distinction that matters most: used at all, and not yet done.
+  if (clamped > 0 && filled === 0) filled = 1;
+  if (clamped < 100 && filled === width) filled = width - 1;
+
   return FILLED.repeat(filled) + EMPTY.repeat(width - filled);
 }
 

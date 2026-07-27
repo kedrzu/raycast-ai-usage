@@ -1,5 +1,5 @@
 import { Action, ActionPanel, Color, Icon, List, openCommandPreferences } from "@raycast/api";
-import { useCachedPromise } from "@raycast/utils";
+import { getProgressIcon, useCachedPromise } from "@raycast/utils";
 import { ReactNode, useState } from "react";
 import { formatPercent, formatRelativeTime, formatReset, progressBar } from "./core/format";
 import { FailureReason, ProviderOutcome, UsageResult, UsageWindow, effectiveUsedPercent } from "./core/models";
@@ -47,20 +47,25 @@ function failureIcon(reason: FailureReason) {
   }
 }
 
+/**
+ * Plain-text rendering for the clipboard, where no icon can travel. Here the
+ * block-character bar earns its place: it is the only visual left.
+ */
 function summarize(outcomes: ProviderOutcome[], now: Date): string {
   return outcomes
     .map((outcome) => {
       if (!outcome.ok) return `${outcome.displayName}: ${outcome.detail}`;
-      const windows = outcome.result.windows
-        .filter((window) => window.isPrimary)
-        .map(
-          (window) =>
-            `${window.label} ${formatPercent(effectiveUsedPercent(window, now))} (${formatReset(window.resetsAt, now)})`,
-        )
-        .join(", ");
-      return `${outcome.result.displayName}: ${windows}`;
+      // Column width comes from the labels present, so a long per-model name
+      // like "GPT-5.3-Codex-Spark" cannot break the alignment.
+      const labelWidth = Math.max(...outcome.result.windows.map((window) => window.label.length));
+      const rows = outcome.result.windows.map((window) => {
+        const percent = effectiveUsedPercent(window, now);
+        const label = window.label.padEnd(labelWidth);
+        return `  ${label}  ${progressBar(percent)} ${formatPercent(percent).padStart(4)}  ${formatReset(window.resetsAt, now)}`;
+      });
+      return [outcome.result.displayName, ...rows].join("\n");
     })
-    .join("\n");
+    .join("\n\n");
 }
 
 export default function Command() {
@@ -91,12 +96,8 @@ export default function Command() {
         content={summarize(outcomes, now)}
         shortcut={{ modifiers: ["cmd"], key: "c" }}
       />
-      <Action
-        title="Open Extension Preferences"
-        icon={Icon.Gear}
-        shortcut={{ modifiers: ["cmd"], key: "," }}
-        onAction={openCommandPreferences}
-      />
+      {/* No explicit shortcut: ⌘, is reserved by Raycast and already opens preferences. */}
+      <Action title="Open Extension Preferences" icon={Icon.Gear} onAction={openCommandPreferences} />
     </>
   );
 
@@ -167,15 +168,14 @@ function WindowItem({ window, now, actions }: { window: UsageWindow; now: Date; 
 
   return (
     <List.Item
-      icon={{ source: Icon.CircleFilled, tintColor: color }}
+      // A real progress ring reads far better at list density than block
+      // characters, and carries the same severity colour.
+      icon={getProgressIcon(percent / 100, color)}
       title={window.label}
       subtitle={isReset ? "just reset" : formatReset(window.resetsAt, now)}
-      accessories={[
-        { text: progressBar(percent) },
-        // The percentage repeats what the colour conveys, so the state is
-        // still legible without relying on colour alone.
-        { tag: { value: formatPercent(percent), color } },
-      ]}
+      // The percentage repeats what the ring's colour conveys, so the state is
+      // still legible without relying on colour alone.
+      accessories={[{ tag: { value: formatPercent(percent), color } }]}
       actions={<ActionPanel>{actions}</ActionPanel>}
     />
   );

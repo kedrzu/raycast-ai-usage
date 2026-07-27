@@ -15,6 +15,16 @@ describe("progressBar", () => {
       expect([...progressBar(percent, 15)]).toHaveLength(15);
     }
   });
+
+  it("shows a sliver for any non-zero usage, so 1% is not indistinguishable from 0%", () => {
+    expect(progressBar(0, 15)).toBe("░".repeat(15));
+    expect(progressBar(1, 15)).toBe("█" + "░".repeat(14));
+  });
+
+  it("holds back the last cell until genuinely full", () => {
+    expect(progressBar(99.6, 15)).toBe("█".repeat(14) + "░");
+    expect(progressBar(100, 15)).toBe("█".repeat(15));
+  });
 });
 
 describe("formatPercent", () => {

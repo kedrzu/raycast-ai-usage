@@ -5,14 +5,25 @@ Every Claude Code and Codex limit in one keyboard-first dashboard — and a noti
 Press your hotkey, read every limit at a glance, press `esc`, get back to work. No tabs, no dropdowns,
 no menu bar round-trip. Everything is on one screen at once.
 
+Each row carries a progress ring, coloured green, amber or red as you approach the limit, with the
+percentage repeated as a tag so the state never depends on colour alone.
+
 ```
-Claude Code                                       Max · updated just now
-  ● Session      reset 1h 42m      ██████████░░░░░   68%
-  ● Weekly       reset 2d 13h      ████░░░░░░░░░░░   24%
+Claude Code                                      Max · updated just now
+  ◕  Session          reset 1h 42m                             66%
+  ◕  Weekly           reset 2d 13h                             67%
 
 Codex                                            Pro · updated just now
-  ● Session      reset 3h 08m      ██████░░░░░░░░░   39%
-  ● Weekly       reset 6d 02h      ████████░░░░░░░   51%
+  ○  Weekly           reset 6d 02h                              1%
+```
+
+`⌘C` copies a plain-text version, where a bar stands in for the ring:
+
+```
+Claude Code
+  Session         ██████████░░░░░  66%  reset 1h 42m
+  Weekly          ██████████░░░░░  67%  reset 2d 13h
+  Weekly · Fable  ██░░░░░░░░░░░░░  12%  reset 2d 13h
 ```
 
 ## Why this exists
