@@ -1,4 +1,4 @@
-# AI Usage Changelog
+# AI Usage Monitor Changelog
 
 ## [Initial Version] - {PR_MERGE_DATE}
 

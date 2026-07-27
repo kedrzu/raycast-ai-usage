@@ -1,8 +1,8 @@
 {
   "$schema": "https://www.raycast.com/schemas/extension.json",
-  "name": "ai-usage",
-  "title": "AI Usage",
-  "description": "Monitor Claude Code and Codex rate limits in one keyboard-first dashboard, with threshold notifications before you hit a wall.",
+  "name": "ai-usage-monitor",
+  "title": "AI Usage Monitor",
+  "description": "Watch Claude Code and Codex rate limits in one keyboard-first dashboard, and get notified before you hit one.",
   "icon": "command-icon.png",
   "author": "kedrzu",
   "categories": [
@@ -17,14 +17,14 @@
     {
       "name": "show-usage",
       "title": "Show AI Usage",
-      "subtitle": "AI Usage",
+      "subtitle": "Claude Code · Codex",
       "description": "Show every AI limit at a glance: session, weekly and per-model windows.",
       "mode": "view"
     },
     {
       "name": "monitor",
       "title": "Monitor AI Usage",
-      "subtitle": "AI Usage",
+      "subtitle": "Claude Code · Codex",
       "description": "Check usage in the background and notify when a threshold is crossed.",
       "mode": "no-view",
       "interval": "10m"

@@ -1,4 +1,4 @@
-# AI Usage
+# AI Usage Monitor
 
 Every Claude Code and Codex limit in one keyboard-first dashboard — and a notification *before* you hit the wall.
 
