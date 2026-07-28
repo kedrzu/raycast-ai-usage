@@ -3,7 +3,7 @@
   "name": "ai-usage-monitor",
   "title": "AI Usage Monitor",
   "description": "Watch Claude Code and Codex rate limits in one keyboard-first dashboard, and get notified before you hit one.",
-  "icon": "command-icon.png",
+  "icon": "icon.png",
   "author": "kedrzu",
   "categories": [
     "Developer Tools",
